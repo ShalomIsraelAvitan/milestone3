@@ -132,6 +132,7 @@ public class UploadPhotoPage extends VerticalLayout{
         });
        
         Image image = new Image(resource, uploadPhoto.getName());
+        //שמירת התמונה על המחשב
         try {
             OutputStream out = new FileOutputStream("C:\\Users\\user\\Desktop\\savePhoto\\"+photoIDofMongo+".jpg");
             out.write(photoFileContend);
@@ -197,8 +198,8 @@ public class UploadPhotoPage extends VerticalLayout{
             boolean b =photoService.setClassification(uploadPhoto, strPredictions);
                 if(b==true){
                     System.out.println("secsses");
-                    remove(this.photoIDofMongo);
-                    photoService.addPhoto(uploadPhoto, uploadPhoto.getIdOfUser());
+                    //remove(this.photoIDofMongo);
+                    //photoService.addPhoto(uploadPhoto, uploadPhoto.getIdOfUser());
                 }
                 else
                     System.out.println("not work");
@@ -213,22 +214,13 @@ public class UploadPhotoPage extends VerticalLayout{
             }
 
             File f = new File("C:\\Users\\user\\Desktop\\savePhoto\\"+photoIDofMongo+".jpg");
-            if(f.delete())
-            {
+            try {
+                f.delete();
                 System.out.println("\n"+f.getName() + " deleted");
+                
+            } catch (Exception e) {
+                System.out.println("\nfailed to deleted the file"+e.toString());
             }
-            else{
-                System.out.println("\nfailed to deleted the file"); 
-            }
-        // Long longPredictions = Long.parseLong(strOfOutpotPhyton);
-        // if(longPredictions >0.5)
-        // {
-        //     Notification.show("Predicted class is Rializem",10000,Position.TOP_CENTER);
-           
-        // }
-        // else{
-        //     Notification.show("Predicted class is Abstract",10000,Position.TOP_CENTER);
-        // }
         
     }
     private void sendToCNN2() {
@@ -322,6 +314,8 @@ public class UploadPhotoPage extends VerticalLayout{
 }
 
 private void creatPhotoUpload2() {
+
+
     MemoryBuffer memoryBuffer = new MemoryBuffer();
     singleFileUpload = new Upload(memoryBuffer);
     singleFileUpload.setAcceptedFileTypes("image/*");
@@ -355,7 +349,9 @@ private void creatPhotoUpload2() {
         }
     });
 }
-    private void sendToCNN3(){
+    
+
+private void sendToCNN3(){
 
         if(this.photoIDofMongo==null)
         {
@@ -379,7 +375,7 @@ private void creatPhotoUpload2() {
        
         Image image = new Image(resource, photo.getName());
         try {
-            OutputStream out = new FileOutputStream("C:\\Users\\user\\Desktop\\savePhoto\\"+123+".jpg");
+            OutputStream out = new FileOutputStream("C:\\Users\\user\\Desktop\\savePhoto\\"+photoIDofMongo+".jpg");
             out.write(photoFileContend);
             out.flush();
             out.close();
@@ -392,7 +388,7 @@ private void creatPhotoUpload2() {
         
         String pathPython = "C:\\Users\\user\\Documents\\VSProj\\milestone2\\src\\main\\java\\israela\\milestone2\\CNN.py";
         //String pathImage = "C:\\Users\\user\\Desktop\\savePhoto\\"+photoID+".png";
-        String pathImage = "C:\\Users\\user\\Desktop\\savePhoto\\"+this.photoIDofMongo+".jpg";
+        String pathImage = "C:\\Users\\user\\Desktop\\savePhoto\\"+photoIDofMongo+".jpg";
         //String pathImage ="C:\\Users\\user\\Desktop\\savePhoto\\00c5774bc9883453a565f949e4b1e19b.jpg";
         
         Thread t = new Thread(new Runnable() {
@@ -426,23 +422,18 @@ private void creatPhotoUpload2() {
                 
             }
             });
-           // Notification.show("The model start working3",5000, Position.TOP_CENTER);
             try {
                 t.start();
-                //Notification.show("The model start working4",5000, Position.TOP_CENTER);
                 
             t.join();
             try {
-                //Notification.show("The model start working5",5000, Position.TOP_CENTER);
                 double p = Double.parseDouble((String)strPredictions.toString());
                 System.out.println("double = "+p);
                 if(p>50)
                 {
-                    //Notification.show("Realism", 5000, Position.BOTTOM_START);
                     strPredictions = "Realism";
                 }
                 else{
-                    //Notification.show("Abstract", 5000, Position.BOTTOM_START);
                     strPredictions = "Abstract";
                 }
     
@@ -457,9 +448,6 @@ private void creatPhotoUpload2() {
                 }
                 Long idUser = Long.parseLong((String)VaadinSession.getCurrent().getSession().getAttribute("userId"));
                 boolean b =photoService.setClassification(uploadPhoto, strPredictions);
-                synchronized(photoIDofMongo) {
-                    photoIDofMongo = photoService.addPhoto(uploadPhoto, idUser);
-                }
                 
                 if(b==true){
                         System.out.println("secsses");

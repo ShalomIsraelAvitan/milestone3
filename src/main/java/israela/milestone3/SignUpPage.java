@@ -3,7 +3,6 @@ package israela.milestone3;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.notification.Notification.Position;
@@ -18,7 +17,7 @@ import com.vaadin.flow.server.VaadinSession;
 @Route(value = "/signup")
 @PageTitle("signup")
 public class SignUpPage extends VerticalLayout{
-     private LoginForm loginForm;
+
     private UserServise userService;
     private TextField fieldName;
     private PasswordField fieldPw;
